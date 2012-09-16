@@ -89,7 +89,7 @@ public class LifeUIImpl implements LifeUI {
         saveButton.setBounds(20, 10, 70, 30);
         startButton.setBounds(270, 10, 50, 30);
         stepButton.setBounds(330, 10, 50, 30);
-        pauseButton .setBounds(390, 10, 50, 30);
+        pauseButton.setBounds(390, 10, 50, 30);
         stopButton.setBounds(450, 10, 50, 30);
 
         StartMouseListener startMouseListener = new StartMouseListener(lifeController, lifePanel);
@@ -109,6 +109,13 @@ public class LifeUIImpl implements LifeUI {
         controlPanel.add(stepButton);
         controlPanel.add(pauseButton);
         controlPanel.add(stopButton);
+
+        JCheckBox showOrigin = new JCheckBox("Show origin border");
+        showOrigin.setBounds(510, 10, 150, 30);
+        showOrigin.setSelected(lifePanel.isShowOriginBorder());
+        controlPanel.add(showOrigin);
+        ShowOriginListener showListener = new ShowOriginListener(lifePanel);
+        showOrigin.addActionListener(showListener);
 
 
         lifeGUI.getContentPane().add(controlPanel);

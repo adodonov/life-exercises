@@ -30,6 +30,7 @@ public class LifePanel extends JPanel {
     private OriginBorder originBorder = new OriginBorder();    
 
     private boolean zeroTurn = true;
+    private boolean showOriginBorder = true;
 
     public LifePanel(Integer fieldWidth, Integer fieldHeight) {
         this.fieldWidth = fieldWidth;
@@ -54,7 +55,7 @@ public class LifePanel extends JPanel {
     private void drawOrigin(Graphics g, int gridSpace) {
         //g.setColor(new Color(255, 228, 225));
         g.setColor(Color.RED);
-        if(originBorder == null || originBorder.isEmpty() ) {return;}
+        if(originBorder == null || originBorder.isEmpty() || !showOriginBorder  ) {return;}
         for(Segment segment : originBorder.getSegments()) {
             g.drawLine((segment.getP1().getCoordX() + focusX) * gridSpace, (fieldHeight - residue) - (segment.getP1().getCoordY() + focusY - 1) * gridSpace,
                     (segment.getP2().getCoordX() + focusX) * gridSpace, (fieldHeight - residue) - (segment.getP2().getCoordY() + focusY - 1) * gridSpace);
@@ -176,6 +177,14 @@ public class LifePanel extends JPanel {
 
     public OriginBorder getOriginBorder() {
         return originBorder;
+    }
+
+    public void setShowOriginBorder(boolean showOriginBorder) {
+        this.showOriginBorder = showOriginBorder;
+    }
+
+    public boolean isShowOriginBorder() {
+        return showOriginBorder;
     }
 }
 
