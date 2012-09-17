@@ -5,6 +5,8 @@ import ru.spb.aboutweb2.life.gameengine.GameEngine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
@@ -117,6 +119,8 @@ public class LifeUIImpl implements LifeUI {
         ShowOriginListener showListener = new ShowOriginListener(lifePanel);
         showOrigin.addActionListener(showListener);
 
+        MenuBuilder mBuilder = new MenuBuilder(lifeGUI);
+        mBuilder.build();
 
         lifeGUI.getContentPane().add(controlPanel);
 
@@ -124,6 +128,8 @@ public class LifeUIImpl implements LifeUI {
 
         return lifeGUI; 
     }
+
+
 
     public LifePanel getLifePanel() {
         return lifePanel;
