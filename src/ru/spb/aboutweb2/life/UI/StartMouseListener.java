@@ -27,8 +27,8 @@ public class StartMouseListener extends MouseAdapter {
         if (e.getButton() == MouseEvent.BUTTON1  &&
                 (lifePanel.getSquares() != null && lifePanel.getSquares().size() != 0)) {
             //lifeController.execute(command);
-            if(lifePanel.isZeroTurn()) {
-                lifePanel.setZeroTurn(false);
+            if(lifePanel.isInitState()) {
+                lifePanel.setInitState(false);
 
                 new Thread(new Runnable() {
                     public void run() {

@@ -9,6 +9,7 @@ import ru.spb.aboutweb2.life.gameengine.GameEngineFactory;
 import ru.spb.aboutweb2.life.gameengine.LifeState;
 
 import java.awt.*;
+import java.io.*;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,6 @@ public class Life {
 
         Life lifeController = new Life();
 
-
         GameEngine gameEngine = GameEngineFactory.getGameEngine();
         lifeController.setGameEngine(gameEngine);
         gameEngine.setController(lifeController);
@@ -50,7 +50,7 @@ public class Life {
 
     public void initLifeState(Map<Coords, Color> initMap) {
         lifeUI.calculateOriginBorder();
-        gameEngine.initLifeState(initMap.keySet());
+        gameEngine.initLifeState(lifeUI.getSquares());
     }
 
     public void start() {
@@ -80,6 +80,75 @@ public class Life {
 
         lifeUI.update(squares);
 
+    }
+
+    public int getTurn() {
+        return gameEngine.getLifeState() == null ? 0 : gameEngine.getLifeState().getTurn();
+    }
+
+    public void save(String pathToFile) {
+        if(gameEngine.getLifeState() == null) {
+            gameEngine.initLifeState(lifeUI.getSquares());
+        }
+        LifeState lifeState = gameEngine.getLifeState();
+        try
+        {
+            Writer wr = new FileWriter(pathToFile);
+            wr.write(String.valueOf(lifeState.getTurn()));
+            wr.write("\r\n");
+            String focus = lifeUI.getFocus() == null ? "0 0" : lifeUI.getFocus().toString();
+            wr.write(focus);
+            wr.write("\r\n");
+            if( lifeState.getExistCells() != null ) {
+                for(Coords coords : lifeState.getExistCells().keySet()) {
+                    wr.write(coords.toString());
+                    wr.write("\r\n");
+                }
+            }
+            wr.flush();
+            wr.close();
+
+        }
+        catch (IOException ex)
+        {
+          System.out.println(ex.toString());
+        }
+
+
+    }
+
+    public void load(String pathToFile) {
+        gameEngine.executeCommand("stop");
+        HashMap<Coords, CellStatus> cells = new HashMap<Coords, CellStatus>();
+
+        try
+        {
+            BufferedReader rd = new BufferedReader(new FileReader(pathToFile));
+            String line = rd.readLine();
+            int turn = Integer.parseInt(line);
+            line = rd.readLine();
+            String[] focus = line.split(" ");
+            lifeUI.setFocus(new Coords(focus[0], focus[1]));
+
+            for ( line = rd.readLine(); line != null; line = rd.readLine()) {
+                String[] records = line.split(" ");
+                cells.put(new Coords(records[0], records[1]), CellStatus.LIVING);
+               
+            }
+
+            LifeState lifeState = new LifeState(turn, cells);
+            gameEngine.setLifeState(lifeState);
+
+        }
+        catch (IOException ex)
+        {
+          System.out.println(ex.toString());
+        }
+
+        updateUI();
+
+
+        
     }
 
     public GameEngine getGameEngine() {

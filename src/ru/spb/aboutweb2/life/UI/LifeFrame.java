@@ -22,18 +22,22 @@ public class LifeFrame  extends JFrame {
                 int keyCode = e.getKeyCode();
                 if (keyCode == KeyEvent.VK_LEFT) {
                     lifePanel.setFocusX(lifePanel.getFocusX() + 1);
+                    lifePanel.setZoomCenterX(lifePanel.getZoomCenterX()+1);
                     repaintLifePanel();
                 }
                 else if (keyCode == KeyEvent.VK_RIGHT) {
                     lifePanel.setFocusX(lifePanel.getFocusX() - 1);
+                    lifePanel.setZoomCenterX(lifePanel.getZoomCenterX()-1);
                     repaintLifePanel();
                 }
                 else if (keyCode == KeyEvent.VK_UP) {
                     lifePanel.setFocusY(lifePanel.getFocusY() - 1);
+                    lifePanel.setZoomCenterY(lifePanel.getZoomCenterY()-1);
                     repaintLifePanel();
                 }
                 else if (keyCode == KeyEvent.VK_DOWN) {
                     lifePanel.setFocusY(lifePanel.getFocusY() + 1);
+                    lifePanel.setZoomCenterY(lifePanel.getZoomCenterY()+1);
                     repaintLifePanel();
                 }    
              }

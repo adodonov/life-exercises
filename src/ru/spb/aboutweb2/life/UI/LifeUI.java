@@ -23,4 +23,9 @@ public interface LifeUI {
 
     void calculateOriginBorder();
 
+    Set<Coords> getSquares();
+    
+    Coords getFocus();
+
+    void setFocus(Coords focus);
 }

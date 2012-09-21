@@ -29,20 +29,24 @@ public class LifePanelMouseListener extends MouseAdapter {
     }
 
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1 && lifePanel.isZeroTurn()) {
+        if (e.getButton() == MouseEvent.BUTTON1 && lifePanel.isInitState()) {
             if(e.getY() < lifePanel.getFieldHeight()) {
                 if (lifePanel.getSquares() == null) {
 
                     Map<Coords, Color> cells = lifePanel.setSquares(new HashMap<Coords, Color>());
                     cells.put(new Coords(0, 0), defaultColor);
-                    lifePanel.setFirstClickX(1 + e.getX() - e.getX() % lifePanel.getCellSize());
-                    lifePanel.setFirstClickY(1 + e.getY() - e.getY() % lifePanel.getCellSize());
-                    lifePanel.setFocusX(lifePanel.getFirstClickX() / lifePanel.getCellSize());
+                    lifePanel.setFirstClickX(1 + lifePanel.getWidth()/2 - (lifePanel.getWidth()/2) % lifePanel.getCellSize());
+                    lifePanel.setFirstClickY(1 + lifePanel.getHeight()/2 - (lifePanel.getHeight()/2) % lifePanel.getCellSize());
+
+                    lifePanel.setFocusX((1 + e.getX() - e.getX() % lifePanel.getCellSize()) / lifePanel.getCellSize());
                     lifePanel.setResidue( lifePanel.getFieldHeight() %  lifePanel.getCellSize());
 
 
                     lifePanel.setFocusY(((lifePanel.getFieldHeight() -  lifePanel.getResidue())
-                        - lifePanel.getFirstClickY()) / lifePanel.getCellSize() + 1);
+                        - (1 + e.getY() - e.getY() % lifePanel.getCellSize())) / lifePanel.getCellSize() + 1);
+
+                    lifePanel.setZoomCenterX(lifePanel.getFocusX() - lifePanel.getFirstClickX()/lifePanel.getCellSize());
+                    lifePanel.setZoomCenterY(lifePanel.getFocusY() - lifePanel.getFirstClickY()/lifePanel.getCellSize());
 
                 } else {
                     int absX = e.getX() / lifePanel.getCellSize();
@@ -57,7 +61,7 @@ public class LifePanelMouseListener extends MouseAdapter {
 
                 lifePanel.repaint();
             }
-        } else if(e.getButton() == MouseEvent.BUTTON1 && !lifePanel.isZeroTurn()) {
+        } else if(e.getButton() == MouseEvent.BUTTON1 && !lifePanel.isInitState()) {
             new Thread(new Runnable() {
                 public void run() {
                         lifeController.executeCommand("pauseOrRun");

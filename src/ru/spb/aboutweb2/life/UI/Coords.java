@@ -16,6 +16,11 @@ public class Coords {
         this.coordY = coordY;
     }
 
+    public Coords(String coordX, String coordY) {
+        this.coordX = Integer.parseInt(coordX);
+        this.coordY = Integer.parseInt(coordY);;
+    }
+
     public int getCoordX() {
         return coordX;
     }
@@ -42,5 +47,10 @@ public class Coords {
         int result = coordX;
         result = 31 * result + coordY;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return coordX + " " + coordY;
     }
 }

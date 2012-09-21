@@ -24,5 +24,7 @@ public interface GameEngine {
 
     LifeState getLifeState();
 
+    void setLifeState(LifeState lifeState); 
+
     void run();
 }

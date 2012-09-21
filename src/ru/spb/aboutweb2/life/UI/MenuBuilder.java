@@ -1,5 +1,7 @@
 package ru.spb.aboutweb2.life.UI;
 
+import ru.spb.aboutweb2.life.Life;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,9 +24,11 @@ public class MenuBuilder {
     private MenuItem miSave;
     private MenuItem miExit;
     private LifeFrame lifeGUI;
+    private Life lifeController;
 
-    public MenuBuilder(LifeFrame lifeGUI) {
+    public MenuBuilder(LifeFrame lifeGUI, Life lifeController) {
         this.lifeGUI = lifeGUI;
+        this.lifeController = lifeController;
     }
 
     public void build() {
@@ -34,6 +38,8 @@ public class MenuBuilder {
 
         miOpen = new MenuItem("Open...");
         mFile.add(miOpen);
+        OpenListener openListener = new OpenListener();
+        miOpen.addActionListener(openListener);
 
         miSave = new MenuItem("Save As...");
         mFile.add(miSave);
@@ -66,27 +72,32 @@ public class MenuBuilder {
                 "Save cells as...", FileDialog.SAVE);
                    fc.setVisible(true);
             String fn = fc.getFile();
+            String dir = fc.getDirectory();
+            if (fn == null)
+              System.out.println("You cancelled the choice");
+            else {
+                System.out.println("You chose " + fn);                
+                lifeController.save(dir + fn);
+
+
+            }
+        }
+    }
+
+    private class OpenListener  implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            FileDialog fc = new FileDialog(lifeGUI,
+                "Open cells...", FileDialog.LOAD);
+                   fc.setVisible(true);
+            String fn = fc.getFile();
+            String dir = fc.getDirectory();
             if (fn == null)
               System.out.println("You cancelled the choice");
             else {
                 System.out.println("You chose " + fn);
-                ObjectOutputStream oos;
+                lifeController.load(dir + fn);
 
-                try
-                {
-                  oos = new ObjectOutputStream(
-                    new FileOutputStream(
-                      fc.getDirectory() +
-                      fc.getFile()));
-
-                  oos.writeObject(lifeGUI);    
-                  oos.flush();
-                  oos.close();
-                }
-                catch (IOException ex)
-                {
-                  System.out.println(ex.toString());
-                }
 
             }
         }

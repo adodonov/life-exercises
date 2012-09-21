@@ -21,7 +21,10 @@ public class LifePanel extends JPanel {
     private int focusY;
     private int residue;
     private int firstClickX;
-    private int firstClickY;    
+    private int firstClickY;
+
+    private int zoomCenterX;
+    private int zoomCenterY;    
 
     private Integer fieldWidth;
     private Integer fieldHeight;
@@ -29,7 +32,7 @@ public class LifePanel extends JPanel {
     private Map<Coords, Color> squares = null;
     private OriginBorder originBorder = new OriginBorder();    
 
-    private boolean zeroTurn = true;
+    private boolean initState = true;
     private boolean showOriginBorder = true;
 
     public LifePanel(Integer fieldWidth, Integer fieldHeight) {
@@ -167,12 +170,12 @@ public class LifePanel extends JPanel {
         return fieldHeight;
     }
 
-    public boolean isZeroTurn() {
-        return zeroTurn;
+    public boolean isInitState() {
+        return initState;
     }
 
-    public void setZeroTurn(boolean zeroTurn) {
-        this.zeroTurn = zeroTurn;
+    public void setInitState(boolean initState) {
+        this.initState = initState;
     }
 
     public OriginBorder getOriginBorder() {
@@ -186,6 +189,23 @@ public class LifePanel extends JPanel {
     public boolean isShowOriginBorder() {
         return showOriginBorder;
     }
+
+    public int getZoomCenterX() {
+        return zoomCenterX;
+    }
+
+    public void setZoomCenterX(int zoomCenterX) {
+        this.zoomCenterX = zoomCenterX;
+    }
+
+    public int getZoomCenterY() {
+        return zoomCenterY;
+    }
+
+    public void setZoomCenterY(int zoomCenterY) {
+        this.zoomCenterY = zoomCenterY;
+    }
 }
+
 
 

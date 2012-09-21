@@ -25,8 +25,8 @@ public class StepMouseListener extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
 
-            if(lifePanel.isZeroTurn()) {
-                lifePanel.setZeroTurn(false);
+            if(lifePanel.isInitState()) {
+                lifePanel.setInitState(false);
 
                 new Thread(new Runnable() {
                     public void run() {

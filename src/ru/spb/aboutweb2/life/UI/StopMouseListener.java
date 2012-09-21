@@ -29,7 +29,7 @@ public class StopMouseListener  extends MouseAdapter {
                     lifeController.executeCommand("stop");
                 }
             }).start();
-            lifePanel.setZeroTurn(true);
+            lifePanel.setInitState(true);
             lifePanel.getOriginBorder().getSegments().clear();
         }
     }

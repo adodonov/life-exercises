@@ -26,8 +26,9 @@ public class LifePanelMouseWheelListener implements MouseWheelListener {
            lifePanel.incCellSize();
         }
         lifePanel.setResidue(lifePanel.getFieldHeight() %  lifePanel.getCellSize());
-        lifePanel.setFocusX(lifePanel.getFirstClickX() / lifePanel.getCellSize());
-        lifePanel.setFocusY(((lifePanel.getFieldHeight() - lifePanel.getResidue()) - lifePanel.getFirstClickY()) / lifePanel.getCellSize() + 1);
+        lifePanel.setFocusX(lifePanel.getZoomCenterX() + lifePanel.getFirstClickX() / lifePanel.getCellSize());
+        lifePanel.setFocusY(lifePanel.getZoomCenterY() + ((lifePanel.getFieldHeight() - lifePanel.getResidue()) - lifePanel.getFirstClickY()) / lifePanel.getCellSize());
+
         lifePanel.repaint();
     }
 

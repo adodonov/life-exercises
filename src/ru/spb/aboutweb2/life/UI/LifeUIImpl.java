@@ -119,7 +119,7 @@ public class LifeUIImpl implements LifeUI {
         ShowOriginListener showListener = new ShowOriginListener(lifePanel);
         showOrigin.addActionListener(showListener);
 
-        MenuBuilder mBuilder = new MenuBuilder(lifeGUI);
+        MenuBuilder mBuilder = new MenuBuilder(lifeGUI, lifeController);
         mBuilder.build();
 
         lifeGUI.getContentPane().add(controlPanel);
@@ -164,4 +164,19 @@ public class LifeUIImpl implements LifeUI {
 
     }
 
+    public Set<Coords> getSquares() {
+        return (lifePanel != null && lifePanel.getSquares() != null ? lifePanel.getSquares().keySet() : null);
+    }
+
+    public Coords getFocus() {
+        return (lifePanel != null ? new Coords(lifePanel.getFocusX(), lifePanel.getFocusY()) : null);        
+    }
+
+    @Override
+    public void setFocus(Coords focus) {
+        if(focus != null) {
+            lifePanel.setFocusX(focus.getCoordX());
+            lifePanel.setFocusY(focus.getCoordY());
+        }
+    }
 }
