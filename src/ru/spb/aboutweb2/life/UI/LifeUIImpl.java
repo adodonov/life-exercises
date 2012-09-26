@@ -1,15 +1,11 @@
 package ru.spb.aboutweb2.life.UI;
 
 import ru.spb.aboutweb2.life.Life;
-import ru.spb.aboutweb2.life.gameengine.GameEngine;
+import ru.spb.aboutweb2.life.UI.listeners.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -179,4 +175,10 @@ public class LifeUIImpl implements LifeUI {
             lifePanel.setFocusY(focus.getCoordY());
         }
     }
+
+    public void initViewSettings() {
+        lifePanel.initSettings(1 + lifePanel.getWidth()/2 - (lifePanel.getWidth()/2) % lifePanel.getCellSize(),
+                1 + lifePanel.getHeight()/2 - (lifePanel.getHeight()/2) % lifePanel.getCellSize());
+    }
+
 }

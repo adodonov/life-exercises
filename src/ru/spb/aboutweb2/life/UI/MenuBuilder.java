@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -66,10 +67,40 @@ public class MenuBuilder {
         lifeGUI.setMenuBar(mb);
     }
 
+    private String selectedFileName;
+
     private class SaveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            FileDialog fc = new FileDialog(lifeGUI,
+            lifeController.executeCommand("pause");
+
+            JFileChooser filesave = new JFileChooser("./saves");
+            filesave.addChoosableFileFilter(new FileTypeFilter(".life", "Saves for Life game"));
+            File file = new File(getSelectedFileName() +"-turn-" + lifeController.getTurn() + ".life");
+            filesave.setSelectedFile(file);            
+            int ret = filesave.showSaveDialog(lifeGUI);
+
+
+            if (ret == JFileChooser.APPROVE_OPTION) {
+            	file = filesave.getSelectedFile();
+                String dir = file.getParent();
+                String fn = file.getName();
+
+                setSelectedFileName(fn);
+                if (fn == null)
+                  System.out.println("You cancelled the choice");
+                else {
+                    System.out.println("You chose " + fn);
+                    lifeController.save(dir + "\\" + fn);
+
+
+                }
+
+            }
+
+
+/*            FileDialog fc = new FileDialog(lifeGUI,
                 "Save cells as...", FileDialog.SAVE);
+
                    fc.setVisible(true);
             String fn = fc.getFile();
             String dir = fc.getDirectory();
@@ -80,7 +111,7 @@ public class MenuBuilder {
                 lifeController.save(dir + fn);
 
 
-            }
+            }                                 */
         }
     }
 
@@ -103,6 +134,19 @@ public class MenuBuilder {
         }
     }
 
+    public String getSelectedFileName() {
+        return selectedFileName == null ? "untitled" : selectedFileName;
+    }
 
-
+    public void setSelectedFileName(String fn) {
+        if(fn == null) {
+            this.selectedFileName = fn;
+            return;
+        }
+        String[] nameParts = fn.split("-");
+        if(nameParts.length == 1) {
+            nameParts = fn.split("\\.");
+        }
+        this.selectedFileName = nameParts[0];
+    }
 }

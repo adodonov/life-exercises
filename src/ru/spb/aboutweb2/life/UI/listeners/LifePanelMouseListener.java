@@ -1,6 +1,8 @@
-package ru.spb.aboutweb2.life.UI;
+package ru.spb.aboutweb2.life.UI.listeners;
 
 import ru.spb.aboutweb2.life.Life;
+import ru.spb.aboutweb2.life.UI.Coords;
+import ru.spb.aboutweb2.life.UI.LifePanel;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -35,18 +37,7 @@ public class LifePanelMouseListener extends MouseAdapter {
 
                     Map<Coords, Color> cells = lifePanel.setSquares(new HashMap<Coords, Color>());
                     cells.put(new Coords(0, 0), defaultColor);
-                    lifePanel.setFirstClickX(1 + lifePanel.getWidth()/2 - (lifePanel.getWidth()/2) % lifePanel.getCellSize());
-                    lifePanel.setFirstClickY(1 + lifePanel.getHeight()/2 - (lifePanel.getHeight()/2) % lifePanel.getCellSize());
-
-                    lifePanel.setFocusX((1 + e.getX() - e.getX() % lifePanel.getCellSize()) / lifePanel.getCellSize());
-                    lifePanel.setResidue( lifePanel.getFieldHeight() %  lifePanel.getCellSize());
-
-
-                    lifePanel.setFocusY(((lifePanel.getFieldHeight() -  lifePanel.getResidue())
-                        - (1 + e.getY() - e.getY() % lifePanel.getCellSize())) / lifePanel.getCellSize() + 1);
-
-                    lifePanel.setZoomCenterX(lifePanel.getFocusX() - lifePanel.getFirstClickX()/lifePanel.getCellSize());
-                    lifePanel.setZoomCenterY(lifePanel.getFocusY() - lifePanel.getFirstClickY()/lifePanel.getCellSize());
+                    lifePanel.initSettings(e.getX(), e.getY());
 
                 } else {
                     int absX = e.getX() / lifePanel.getCellSize();

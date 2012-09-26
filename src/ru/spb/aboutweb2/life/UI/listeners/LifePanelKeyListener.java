@@ -1,4 +1,6 @@
-package ru.spb.aboutweb2.life.UI;
+package ru.spb.aboutweb2.life.UI.listeners;
+
+import ru.spb.aboutweb2.life.UI.LifePanel;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

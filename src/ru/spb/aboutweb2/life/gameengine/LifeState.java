@@ -37,9 +37,12 @@ public class LifeState {
 
     public LifeState(int turn, HashMap<Coords, CellStatus> cells) {
         this.turn = turn;
-        this.cells = cells;
-        if(cells == null) {
-            init();
+        init();
+        if(cells != null) {this.cells = cells;}
+        for(Coords cell : this.cells.keySet()) {
+            if(CellStatus.LIVING.equals(cells.get(cell)) || CellStatus.DYING.equals(cells.get(cell)) ) {
+                existCells.put(cell, cells.get(cell));
+            }
         }
     }
 

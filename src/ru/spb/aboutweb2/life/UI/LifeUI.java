@@ -28,4 +28,7 @@ public interface LifeUI {
     Coords getFocus();
 
     void setFocus(Coords focus);
+
+    void initViewSettings();
+
 }

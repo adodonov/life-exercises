@@ -1,6 +1,7 @@
-package ru.spb.aboutweb2.life.UI;
+package ru.spb.aboutweb2.life.UI.listeners;
 
 import ru.spb.aboutweb2.life.Life;
+import ru.spb.aboutweb2.life.UI.LifePanel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,29 +10,31 @@ import java.awt.event.MouseEvent;
  * Created by IntelliJ IDEA.
  * User: Alex
  * Date: 14.09.2012
- * Time: 3:56:58
+ * Time: 1:58:50
  * To change this template use File | Settings | File Templates.
  */
-public class StopMouseListener  extends MouseAdapter {
+public class PauseMouseListener  extends MouseAdapter {
 
     private LifePanel lifePanel;
     private Life lifeController;
 
-    public StopMouseListener(Life lifeController, LifePanel lifePanel) {
+    public PauseMouseListener(Life lifeController, LifePanel lifePanel) {
         this.lifePanel = lifePanel;
         this.lifeController = lifeController;
     }
 
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
+            //lifeController.execute(command);
             new Thread(new Runnable() {
                 public void run() {
-                    lifeController.executeCommand("stop");
+                        lifeController.executeCommand("pause");
                 }
             }).start();
-            lifePanel.setInitState(true);
-            lifePanel.getOriginBorder().getSegments().clear();
-        }
+
+
+        }    
+
     }
 
 }

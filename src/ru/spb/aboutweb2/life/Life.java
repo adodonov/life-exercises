@@ -119,8 +119,8 @@ public class Life {
 
     public void load(String pathToFile) {
         gameEngine.executeCommand("stop");
-        HashMap<Coords, CellStatus> cells = new HashMap<Coords, CellStatus>();
 
+        HashMap<Coords, CellStatus> cells = new HashMap<Coords, CellStatus>();
         try
         {
             BufferedReader rd = new BufferedReader(new FileReader(pathToFile));

@@ -205,6 +205,22 @@ public class LifePanel extends JPanel {
     public void setZoomCenterY(int zoomCenterY) {
         this.zoomCenterY = zoomCenterY;
     }
+
+    public void initSettings(int initX, int initY) {
+        setFirstClickX(1 + getWidth()/2 - (getWidth()/2) % getCellSize());
+        setFirstClickY(1 + getHeight()/2 - (getHeight()/2) % getCellSize());
+
+        setFocusX((1 + initX - initX % getCellSize()) / getCellSize());
+        setResidue( getFieldHeight() %  getCellSize());
+
+
+        setFocusY(((getFieldHeight() -  getResidue())
+            - (1 + initY - initY % getCellSize())) / getCellSize() + 1);
+
+        setZoomCenterX(getFocusX() - getFirstClickX()/getCellSize());
+        setZoomCenterY(getFocusY() - getFirstClickY()/getCellSize());
+    }
+
 }
 
 
