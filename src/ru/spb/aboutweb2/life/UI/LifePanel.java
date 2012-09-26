@@ -32,7 +32,6 @@ public class LifePanel extends JPanel {
     private Map<Coords, Color> squares = null;
     private OriginBorder originBorder = new OriginBorder();    
 
-    private boolean initState = true;
     private boolean showOriginBorder = true;
 
     public LifePanel(Integer fieldWidth, Integer fieldHeight) {
@@ -168,14 +167,6 @@ public class LifePanel extends JPanel {
 
     public Integer getFieldHeight() {
         return fieldHeight;
-    }
-
-    public boolean isInitState() {
-        return initState;
-    }
-
-    public void setInitState(boolean initState) {
-        this.initState = initState;
     }
 
     public OriginBorder getOriginBorder() {

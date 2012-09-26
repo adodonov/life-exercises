@@ -20,6 +20,8 @@ public class LifeUIImpl implements LifeUI {
     private final static Integer WINDOW_WIDTH = 800;
     private final static Integer WINDOW_HEIGHT = 750;
 
+    private UIMode mode;
+
     private LifePanel lifePanel;
 
     private Life lifeController;
@@ -39,6 +41,7 @@ public class LifeUIImpl implements LifeUI {
                     }
             }
         }).start();
+
     }
 
     public void showUI() {
@@ -90,16 +93,16 @@ public class LifeUIImpl implements LifeUI {
         pauseButton.setBounds(390, 10, 50, 30);
         stopButton.setBounds(450, 10, 50, 30);
 
-        StartMouseListener startMouseListener = new StartMouseListener(lifeController, lifePanel);
+        StartMouseListener startMouseListener = new StartMouseListener(lifeController);
         startButton.addMouseListener(startMouseListener);
 
-        PauseMouseListener pauseMouseListener = new PauseMouseListener(lifeController, lifePanel);
+        PauseMouseListener pauseMouseListener = new PauseMouseListener(lifeController);
         pauseButton.addMouseListener(pauseMouseListener);
 
-        StepMouseListener stepMouseListener = new StepMouseListener(lifeController, lifePanel);
+        StepMouseListener stepMouseListener = new StepMouseListener(lifeController);
         stepButton.addMouseListener(stepMouseListener);
 
-        StopMouseListener stopMouseListener = new StopMouseListener(lifeController, lifePanel);
+        StopMouseListener stopMouseListener = new StopMouseListener(lifeController);
         stopButton.addMouseListener(stopMouseListener);
 
         controlPanel.add(startButton);
@@ -122,6 +125,8 @@ public class LifeUIImpl implements LifeUI {
 
         setLifePanel(lifePanel);
 
+        setMode(UIMode.INIT);
+
         return lifeGUI; 
     }
 
@@ -137,6 +142,7 @@ public class LifeUIImpl implements LifeUI {
 
 
     public void calculateOriginBorder() {
+        lifePanel.getOriginBorder().clear();
         Set<Coords> squares = lifePanel.getSquares().keySet();
         for(Coords square : squares) {
             if(!squares.contains(new Coords(square.getCoordX()-1, square.getCoordY()))) {
@@ -181,4 +187,15 @@ public class LifeUIImpl implements LifeUI {
                 1 + lifePanel.getHeight()/2 - (lifePanel.getHeight()/2) % lifePanel.getCellSize());
     }
 
+    public void clear() {
+        lifePanel.getOriginBorder().getSegments().clear();        
+    }
+
+    public UIMode getMode() {
+        return mode;
+    }
+
+    public void setMode(UIMode mode) {
+        this.mode = mode;
+    }
 }

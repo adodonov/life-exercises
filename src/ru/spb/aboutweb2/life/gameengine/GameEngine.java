@@ -16,8 +16,6 @@ import java.util.Set;
 public interface GameEngine {
     void setController(Life life);
 
-    void executeCommand(String command);
-
     void initLifeState(Set<Coords> coords);
 
     LifeState getNextState(LifeState lifeState);
@@ -27,4 +25,12 @@ public interface GameEngine {
     void setLifeState(LifeState lifeState); 
 
     void run();
+
+    void pause();
+
+    void stop();
+
+    void step();
+
+    boolean isRun();    
 }

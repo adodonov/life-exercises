@@ -15,11 +15,9 @@ import java.awt.event.MouseEvent;
  */
 public class StopMouseListener  extends MouseAdapter {
 
-    private LifePanel lifePanel;
     private Life lifeController;
 
-    public StopMouseListener(Life lifeController, LifePanel lifePanel) {
-        this.lifePanel = lifePanel;
+    public StopMouseListener(Life lifeController) {
         this.lifeController = lifeController;
     }
 
@@ -30,8 +28,6 @@ public class StopMouseListener  extends MouseAdapter {
                     lifeController.executeCommand("stop");
                 }
             }).start();
-            lifePanel.setInitState(true);
-            lifePanel.getOriginBorder().getSegments().clear();
         }
     }
 

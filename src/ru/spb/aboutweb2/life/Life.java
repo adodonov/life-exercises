@@ -3,11 +3,13 @@ package ru.spb.aboutweb2.life;
 import ru.spb.aboutweb2.life.UI.Coords;
 import ru.spb.aboutweb2.life.UI.LifeUI;
 import ru.spb.aboutweb2.life.UI.LifeUIFactory;
+import ru.spb.aboutweb2.life.UI.UIMode;
 import ru.spb.aboutweb2.life.gameengine.CellStatus;
 import ru.spb.aboutweb2.life.gameengine.GameEngine;
 import ru.spb.aboutweb2.life.gameengine.GameEngineFactory;
 import ru.spb.aboutweb2.life.gameengine.LifeState;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.EnumMap;
@@ -35,27 +37,88 @@ public class Life {
         lifeController.setGameEngine(gameEngine);
         gameEngine.setController(lifeController);
 
+        LookAndFeel old = UIManager.getLookAndFeel();
+        System.out.println(old);
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (Exception e) {
+            try {
+                UIManager.setLookAndFeel(old);
+            } catch (UnsupportedLookAndFeelException e1) {
+                e1.printStackTrace(); 
+            }
+        }
+
+
         LifeUI lifeUI = LifeUIFactory.getLifeUI();
         lifeController.setLifeUI(lifeUI);
         lifeUI.setController(lifeController);
 
-        //initLifeState(Set< Coords > coords)
         lifeUI.showUI();
 
     }
 
-    public void executeCommand(String command) {
-        gameEngine.executeCommand(command);
+    private boolean isInitState() {
+        return UIMode.INIT.equals(lifeUI.getMode());
     }
 
-    public void initLifeState(Map<Coords, Color> initMap) {
+    private boolean isRunning() {
+        return UIMode.RUNNING.equals(lifeUI.getMode());
+    }
+
+    public void executeCommand(String command) {
+        if ("pause".equals(command)) {
+            gameEngine.pause();
+            lifeUI.setMode(UIMode.PAUSE);            
+        } else if ("step".equals(command)) {
+            if(isInitState()) {
+                initLifeState();
+            }            
+            gameEngine.step();
+            lifeUI.setMode(UIMode.PAUSE);
+        } else if ("stop".equals(command)) {
+            gameEngine.stop();
+            lifeUI.clear();
+            lifeUI.setMode(UIMode.INIT);
+        } else if ("pauseOrRun".equals(command)) {
+            if(gameEngine.isRun()) {
+                gameEngine.pause();
+                lifeUI.setMode(UIMode.PAUSE);
+            } else {
+                if(isInitState()) {
+                    initLifeState();
+                }
+                gameEngine.run();
+                lifeUI.setMode(UIMode.RUNNING);
+            }
+        } else if ("run".equals(command)) {
+            if(lifeUI.getSquares() == null || lifeUI.getSquares().size() == 0) {return;}
+            if(isInitState()) {
+                initLifeState();    
+            }
+            gameEngine.run();
+            lifeUI.setMode(UIMode.RUNNING);
+        } else if ("showSave".equals(command)) {
+            if(isInitState()) {
+                gameEngine.initLifeState(lifeUI.getSquares());
+            }                
+            if(isRunning()) {
+                executeCommand("pause");
+            }
+        } else if ("showOpen".equals(command)) {
+            if(isRunning()) {
+                executeCommand("pause");
+            }
+        }
+
+    }
+
+
+    public void initLifeState() {
         lifeUI.calculateOriginBorder();
         gameEngine.initLifeState(lifeUI.getSquares());
     }
 
-    public void start() {
-        gameEngine.run();
-    }
 
     private EnumMap<CellStatus, Color> cellToColor;
 
@@ -87,9 +150,6 @@ public class Life {
     }
 
     public void save(String pathToFile) {
-        if(gameEngine.getLifeState() == null) {
-            gameEngine.initLifeState(lifeUI.getSquares());
-        }
         LifeState lifeState = gameEngine.getLifeState();
         try
         {
@@ -118,8 +178,6 @@ public class Life {
     }
 
     public void load(String pathToFile) {
-        gameEngine.executeCommand("stop");
-
         HashMap<Coords, CellStatus> cells = new HashMap<Coords, CellStatus>();
         try
         {
@@ -128,7 +186,7 @@ public class Life {
             int turn = Integer.parseInt(line);
             line = rd.readLine();
             String[] focus = line.split(" ");
-            lifeUI.setFocus(new Coords(focus[0], focus[1]));
+
 
             for ( line = rd.readLine(); line != null; line = rd.readLine()) {
                 String[] records = line.split(" ");
@@ -137,6 +195,9 @@ public class Life {
             }
 
             LifeState lifeState = new LifeState(turn, cells);
+
+            executeCommand("stop");
+            lifeUI.setFocus(new Coords(focus[0], focus[1]));
             gameEngine.setLifeState(lifeState);
 
         }

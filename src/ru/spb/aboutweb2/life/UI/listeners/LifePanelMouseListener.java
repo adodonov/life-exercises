@@ -3,6 +3,7 @@ package ru.spb.aboutweb2.life.UI.listeners;
 import ru.spb.aboutweb2.life.Life;
 import ru.spb.aboutweb2.life.UI.Coords;
 import ru.spb.aboutweb2.life.UI.LifePanel;
+import ru.spb.aboutweb2.life.UI.UIMode;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -31,7 +32,7 @@ public class LifePanelMouseListener extends MouseAdapter {
     }
 
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1 && lifePanel.isInitState()) {
+        if (e.getButton() == MouseEvent.BUTTON1 && isInitState()) {
             if(e.getY() < lifePanel.getFieldHeight()) {
                 if (lifePanel.getSquares() == null) {
 
@@ -52,7 +53,7 @@ public class LifePanelMouseListener extends MouseAdapter {
 
                 lifePanel.repaint();
             }
-        } else if(e.getButton() == MouseEvent.BUTTON1 && !lifePanel.isInitState()) {
+        } else if(e.getButton() == MouseEvent.BUTTON1 && !isInitState()) {
             new Thread(new Runnable() {
                 public void run() {
                         lifeController.executeCommand("pauseOrRun");
@@ -64,6 +65,10 @@ public class LifePanelMouseListener extends MouseAdapter {
     }
 
     private Life lifeController;
+
+    private boolean isInitState() {
+        return UIMode.INIT.equals(lifeController.getLifeUI().getMode());
+    }
 
 
 }

@@ -15,11 +15,9 @@ import java.awt.event.MouseEvent;
  */
 public class PauseMouseListener  extends MouseAdapter {
 
-    private LifePanel lifePanel;
     private Life lifeController;
 
-    public PauseMouseListener(Life lifeController, LifePanel lifePanel) {
-        this.lifePanel = lifePanel;
+    public PauseMouseListener(Life lifeController) {
         this.lifeController = lifeController;
     }
 

@@ -71,7 +71,7 @@ public class MenuBuilder {
 
     private class SaveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            lifeController.executeCommand("pause");
+            lifeController.executeCommand("showSave");
 
             JFileChooser filesave = new JFileChooser("./saves");
             filesave.addChoosableFileFilter(new FileTypeFilter(".life", "Saves for Life game"));
@@ -91,44 +91,30 @@ public class MenuBuilder {
                 else {
                     System.out.println("You chose " + fn);
                     lifeController.save(dir + "\\" + fn);
-
-
                 }
 
             }
-
-
-/*            FileDialog fc = new FileDialog(lifeGUI,
-                "Save cells as...", FileDialog.SAVE);
-
-                   fc.setVisible(true);
-            String fn = fc.getFile();
-            String dir = fc.getDirectory();
-            if (fn == null)
-              System.out.println("You cancelled the choice");
-            else {
-                System.out.println("You chose " + fn);                
-                lifeController.save(dir + fn);
-
-
-            }                                 */
         }
     }
 
     private class OpenListener  implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            FileDialog fc = new FileDialog(lifeGUI,
-                "Open cells...", FileDialog.LOAD);
-                   fc.setVisible(true);
-            String fn = fc.getFile();
-            String dir = fc.getDirectory();
-            if (fn == null)
-              System.out.println("You cancelled the choice");
-            else {
-                System.out.println("You chose " + fn);
-                lifeController.load(dir + fn);
+            lifeController.executeCommand("showOpen");
+            JFileChooser fileopen = new JFileChooser("./saves");
+            fileopen.addChoosableFileFilter(new FileTypeFilter(".life", "Saves for Life game"));
+            int ret = fileopen.showOpenDialog(lifeGUI);
+            if (ret == JFileChooser.APPROVE_OPTION) {
+            	File file = fileopen.getSelectedFile();
+                String dir = file.getParent();
+                String fn = file.getName();
 
+                if (fn == null)
+                  System.out.println("You cancelled the choice");
+                else {
+                    System.out.println("You chose " + fn);
+                    lifeController.load(dir + "\\" + fn);
+                }
 
             }
         }

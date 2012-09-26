@@ -48,11 +48,15 @@ public class GameEngineImpl implements GameEngine {
     }
 
     private boolean canContinue() {
-        return lifeState!= null && lifeState.getCells() != null && !lifeState.getCells().isEmpty() && !(isNewTurn(phaseNum) && isStopped());
+        return lifeState!= null && lifeState.getCellCount() != 0 && !(isNewTurn(phaseNum) && isStopped());
     }
 
     public void run() {
-        doRun();
+        new Thread(new Runnable() {
+            public void run() {
+                doRun();
+            }
+        }).start();
     }
 
     private synchronized void doRun() {
@@ -79,12 +83,15 @@ public class GameEngineImpl implements GameEngine {
         engineStatus = EngineStatus.STOPPED;
     }
 
-    private void step() {
+    public void step() {
         engineStatus = EngineStatus.STOPPED;
         doStep();
     }
 
     private synchronized void doStep() {
+        if(lifeState == null || lifeState.getCellCount() == 0) {
+            return;
+        }
         do {
             if(isNewTurn(phaseNum)) {
                 System.out.println("Turn " + phaseNum/3  + "  Cell count = " + lifeState.getCellCount());
@@ -97,7 +104,7 @@ public class GameEngineImpl implements GameEngine {
         }  while(!isNewTurn(phaseNum));
     }
 
-    private void stop() {
+    public void stop() {
         engineStatus = EngineStatus.STOPPED;
         doStop();
         System.out.println("interrupted!");
@@ -115,24 +122,8 @@ public class GameEngineImpl implements GameEngine {
         return transformer.getNextState(lifeState);
     }
 
-    @Override
-    public void executeCommand(String command) {
-        if ("pause".equals(command)) {
-            pause();
-        } else if ("step".equals(command)) {
-            step();
-        } else if ("stop".equals(command)) {
-            stop();
-        } else if ("pauseOrRun".equals(command)) {
-            if(isRun()) {
-                pause();
-            } else {
-                run();
-            }
-        }
-    }
 
-    private void pause() {
+    public void pause() {
             engineStatus = EngineStatus.STOPPED;
             Toolkit.getDefaultToolkit().beep();
     }

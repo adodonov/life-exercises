@@ -32,5 +32,9 @@ public class OriginBorder {
         return segments == null || segments.size() == 0;
     }
 
+    public void clear() {
+        segments.clear();
+    }
+
 
 }

@@ -29,6 +29,10 @@ public interface LifeUI {
 
     void setFocus(Coords focus);
 
-    void initViewSettings();
+    void clear();
+
+    UIMode getMode();
+
+    void setMode(UIMode mode);
 
 }

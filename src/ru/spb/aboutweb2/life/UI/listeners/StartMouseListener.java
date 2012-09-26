@@ -15,36 +15,19 @@ import java.awt.event.MouseEvent;
  */
 public class StartMouseListener extends MouseAdapter {
 
-    private LifePanel lifePanel;
     private Life lifeController;
 
-
-    public StartMouseListener(Life lifeController, LifePanel lifePanel) {
-        this.lifePanel = lifePanel;
+    public StartMouseListener(Life lifeController) {
         this.lifeController = lifeController;
     }
 
     public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1  &&
-                (lifePanel.getSquares() != null && lifePanel.getSquares().size() != 0)) {
-            //lifeController.execute(command);
-            if(lifePanel.isInitState()) {
-                lifePanel.setInitState(false);
-
+        if (e.getButton() == MouseEvent.BUTTON1) {
                 new Thread(new Runnable() {
                     public void run() {
-                        lifeController.initLifeState(lifePanel.getSquares());
-                        lifeController.start();
+                        lifeController.executeCommand("run");
                     }
                 }).start();
-            } else {
-                new Thread(new Runnable() {
-                    public void run() {
-                        lifeController.start();
-                    }    
-                }).start();
-            }
-
         }
     }
 

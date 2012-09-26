@@ -2,6 +2,7 @@ package ru.spb.aboutweb2.life.UI.listeners;
 
 import ru.spb.aboutweb2.life.Life;
 import ru.spb.aboutweb2.life.UI.LifePanel;
+import ru.spb.aboutweb2.life.UI.UIMode;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,37 +16,23 @@ import java.awt.event.MouseEvent;
  */
 public class StepMouseListener extends MouseAdapter {
 
-    private LifePanel lifePanel;
     private Life lifeController;
 
-    public StepMouseListener(Life lifeController, LifePanel lifePanel) {
-        this.lifePanel = lifePanel;
+    public StepMouseListener(Life lifeController) {
         this.lifeController = lifeController;
     }
 
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
 
-            if(lifePanel.isInitState()) {
-                lifePanel.setInitState(false);
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        lifeController.initLifeState(lifePanel.getSquares());
-                        lifeController.executeCommand("step");
-                    }
-                }).start();
-            }
-            else {
-
             new Thread(new Runnable() {
                 public void run() {
                         lifeController.executeCommand("step");
                 }
             }).start();
-            }
-
         }
+
+
 
     }
 
