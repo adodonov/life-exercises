@@ -25,9 +25,9 @@ public interface LifeUI {
 
     Set<Coords> getSquares();
     
-    Coords getFocus();
+    UIState getUIState(); 
 
-    void setFocus(Coords focus);
+    void setUIState(UIState uiState);
 
     void clear();
 

@@ -1,9 +1,6 @@
 package ru.spb.aboutweb2.life;
 
-import ru.spb.aboutweb2.life.UI.Coords;
-import ru.spb.aboutweb2.life.UI.LifeUI;
-import ru.spb.aboutweb2.life.UI.LifeUIFactory;
-import ru.spb.aboutweb2.life.UI.UIMode;
+import ru.spb.aboutweb2.life.UI.*;
 import ru.spb.aboutweb2.life.gameengine.CellStatus;
 import ru.spb.aboutweb2.life.gameengine.GameEngine;
 import ru.spb.aboutweb2.life.gameengine.GameEngineFactory;
@@ -151,14 +148,24 @@ public class Life {
 
     public void save(String pathToFile) {
         LifeState lifeState = gameEngine.getLifeState();
+        UIState uiState = lifeUI.getUIState();
         try
         {
             Writer wr = new FileWriter(pathToFile);
-            wr.write(String.valueOf(lifeState.getTurn()));
+            int cellSize = uiState.getCellSize();
+            wr.write(Integer.toString(cellSize));
             wr.write("\r\n");
-            String focus = lifeUI.getFocus() == null ? "0 0" : lifeUI.getFocus().toString();
+            String focus = uiState.getFocus() == null ? "0 0" : uiState.getFocus().toString();
             wr.write(focus);
             wr.write("\r\n");
+            String firstClick = uiState.getFirstClick() == null ? "0 0" : uiState.getFirstClick().toString();
+            wr.write(firstClick);
+            wr.write("\r\n");
+            String zoomCenter = uiState.getZoomCenter() == null ? "0 0" : uiState.getZoomCenter().toString();
+            wr.write(zoomCenter);
+            wr.write("\r\n");
+            wr.write(String.valueOf(lifeState.getTurn()));
+            wr.write("\r\n");            
             if( lifeState.getExistCells() != null ) {
                 for(Coords coords : lifeState.getExistCells().keySet()) {
                     wr.write(coords.toString());
@@ -181,11 +188,22 @@ public class Life {
         HashMap<Coords, CellStatus> cells = new HashMap<Coords, CellStatus>();
         try
         {
+            UIState uiState = new UIState();
             BufferedReader rd = new BufferedReader(new FileReader(pathToFile));
             String line = rd.readLine();
-            int turn = Integer.parseInt(line);
+            uiState.setCellSize(Integer.parseInt(line));
             line = rd.readLine();
             String[] focus = line.split(" ");
+            uiState.setFocus(new Coords(focus[0], focus[1]));
+            line = rd.readLine();
+            String[] firstClick = line.split(" ");
+            uiState.setFirstClick(new Coords(firstClick[0], firstClick[1]));
+            line = rd.readLine();
+            String[] zoomCenter = line.split(" ");
+            uiState.setZoomCenter(new Coords(zoomCenter[0], zoomCenter[1]));
+
+            line = rd.readLine();
+            int turn = Integer.parseInt(line);
 
 
             for ( line = rd.readLine(); line != null; line = rd.readLine()) {
@@ -197,7 +215,7 @@ public class Life {
             LifeState lifeState = new LifeState(turn, cells);
 
             executeCommand("stop");
-            lifeUI.setFocus(new Coords(focus[0], focus[1]));
+            lifeUI.setUIState(uiState);
             gameEngine.setLifeState(lifeState);
 
         }

@@ -26,6 +26,8 @@ public class LifeUIImpl implements LifeUI {
 
     private Life lifeController;
 
+    private MenuBuilder mBuilder;
+
     public void setController(Life lifeController) {
         this.lifeController = lifeController;
     }
@@ -80,14 +82,11 @@ public class LifeUIImpl implements LifeUI {
         controlPanel.setLayout(null);
         controlPanel.setPreferredSize(new Dimension(fieldWidth, 50));
 
-
-        JButton saveButton = new JButton("Save");
         JButton startButton = new JButton(">>");
         JButton stepButton = new JButton(">");
         JButton pauseButton = new JButton("||");
-        JButton stopButton = new JButton("s");
+        JButton stopButton = new JButton("cls");
 
-        saveButton.setBounds(20, 10, 70, 30);
         startButton.setBounds(270, 10, 50, 30);
         stepButton.setBounds(330, 10, 50, 30);
         pauseButton.setBounds(390, 10, 50, 30);
@@ -106,7 +105,6 @@ public class LifeUIImpl implements LifeUI {
         stopButton.addMouseListener(stopMouseListener);
 
         controlPanel.add(startButton);
-        controlPanel.add(saveButton);
         controlPanel.add(stepButton);
         controlPanel.add(pauseButton);
         controlPanel.add(stopButton);
@@ -118,7 +116,7 @@ public class LifeUIImpl implements LifeUI {
         ShowOriginListener showListener = new ShowOriginListener(lifePanel);
         showOrigin.addActionListener(showListener);
 
-        MenuBuilder mBuilder = new MenuBuilder(lifeGUI, lifeController);
+        mBuilder = new MenuBuilder(lifeGUI, lifeController);
         mBuilder.build();
 
         lifeGUI.getContentPane().add(controlPanel);
@@ -170,25 +168,14 @@ public class LifeUIImpl implements LifeUI {
         return (lifePanel != null && lifePanel.getSquares() != null ? lifePanel.getSquares().keySet() : null);
     }
 
-    public Coords getFocus() {
-        return (lifePanel != null ? new Coords(lifePanel.getFocusX(), lifePanel.getFocusY()) : null);        
-    }
-
-    @Override
-    public void setFocus(Coords focus) {
-        if(focus != null) {
-            lifePanel.setFocusX(focus.getCoordX());
-            lifePanel.setFocusY(focus.getCoordY());
-        }
-    }
-
     public void initViewSettings() {
         lifePanel.initSettings(1 + lifePanel.getWidth()/2 - (lifePanel.getWidth()/2) % lifePanel.getCellSize(),
                 1 + lifePanel.getHeight()/2 - (lifePanel.getHeight()/2) % lifePanel.getCellSize());
     }
 
     public void clear() {
-        lifePanel.getOriginBorder().getSegments().clear();        
+        lifePanel.getOriginBorder().getSegments().clear();
+        mBuilder.setSelectedFileName(null);
     }
 
     public UIMode getMode() {
@@ -197,5 +184,13 @@ public class LifeUIImpl implements LifeUI {
 
     public void setMode(UIMode mode) {
         this.mode = mode;
+    }
+
+    public UIState getUIState() {
+        return lifePanel.getUiState();        
+    }
+
+    public void setUIState(UIState uiState) {
+        lifePanel.setUiState(uiState);
     }
 }

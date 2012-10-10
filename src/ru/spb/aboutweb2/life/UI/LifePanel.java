@@ -14,20 +14,13 @@ import java.util.Set;
  */
 public class LifePanel extends JPanel {
     final private int MIN_CELL_SIZE = 10;
-    final private int MAX_CELL_SIZE = 50;    
+    final private int MAX_CELL_SIZE = 50;
 
-    private int cellSize = 37;
-    private int focusX;
-    private int focusY;
-    private int residue;
-    private int firstClickX;
-    private int firstClickY;
-
-    private int zoomCenterX;
-    private int zoomCenterY;    
-
+    UIState uiState = new UIState();
     private Integer fieldWidth;
-    private Integer fieldHeight;
+    private Integer fieldHeight;    
+
+    private int residue;
 
     private Map<Coords, Color> squares = null;
     private OriginBorder originBorder = new OriginBorder();    
@@ -40,6 +33,10 @@ public class LifePanel extends JPanel {
     }
 
     public void paintComponent(Graphics g) {
+        int focusX = uiState.getFocusX();
+        int focusY = uiState.getFocusY();
+        int cellSize = uiState.getCellSize();        
+
         g.setColor (new Color(240, 255, 255));
         g.fillRect( 0, 0, fieldWidth, fieldHeight );
         drawGrid(g, cellSize);
@@ -55,7 +52,9 @@ public class LifePanel extends JPanel {
     }
 
     private void drawOrigin(Graphics g, int gridSpace) {
-        //g.setColor(new Color(255, 228, 225));
+        int focusX = uiState.getFocusX();
+        int focusY = uiState.getFocusY();
+
         g.setColor(Color.RED);
         if(originBorder == null || originBorder.isEmpty() || !showOriginBorder  ) {return;}
         for(Segment segment : originBorder.getSegments()) {
@@ -93,19 +92,19 @@ public class LifePanel extends JPanel {
 
 
     public int getFocusX() {
-        return focusX;
+        return uiState.getFocusX();
     }
 
     public void setFocusX(int focusX) {
-        this.focusX = focusX;
+        uiState.setFocusX(focusX);
     }
 
     public int getFocusY() {
-        return focusY;
+        return uiState.getFocusY();
     }
 
     public void setFocusY(int focusY) {
-        this.focusY = focusY;
+        uiState.setFocusY(focusY);
     }
 
     public int getResidue() {
@@ -117,38 +116,38 @@ public class LifePanel extends JPanel {
     }
 
     public int getFirstClickX() {
-        return firstClickX;
+        return uiState.getFirstClickX();
     }
 
     public void setFirstClickX(int firstClickX) {
-        this.firstClickX = firstClickX;
+        uiState.setFirstClickX(firstClickX);
     }
 
     public int getFirstClickY() {
-        return firstClickY;
+        return uiState.getFirstClickY();
     }
 
     public void setFirstClickY(int firstClickY) {
-        this.firstClickY = firstClickY;
+        uiState.setFirstClickY(firstClickY);
     }
 
     public int getCellSize() {
-        return cellSize;
+        return uiState.getCellSize();
     }
 
     public void setCellSize(int cellSize) {
-        this.cellSize = cellSize;
+        uiState.setCellSize(cellSize);
     }
 
     public void incCellSize() {
-        if(this.cellSize <= MAX_CELL_SIZE) {
-            this.cellSize++;
+        if(uiState.getCellSize() <= MAX_CELL_SIZE) {
+            uiState.setCellSize(uiState.getCellSize() + 1);
         }
     }
 
     public void decCellSize() {
-        if(this.cellSize >= MIN_CELL_SIZE) {
-            this.cellSize--;
+        if(uiState.getCellSize()  >= MIN_CELL_SIZE) {
+            uiState.setCellSize(uiState.getCellSize() - 1);
         }
     }
 
@@ -182,19 +181,19 @@ public class LifePanel extends JPanel {
     }
 
     public int getZoomCenterX() {
-        return zoomCenterX;
+        return uiState.getZoomCenterX();
     }
 
     public void setZoomCenterX(int zoomCenterX) {
-        this.zoomCenterX = zoomCenterX;
+        uiState.setZoomCenterX(zoomCenterX);
     }
 
     public int getZoomCenterY() {
-        return zoomCenterY;
+        return uiState.getZoomCenterY();
     }
 
     public void setZoomCenterY(int zoomCenterY) {
-        this.zoomCenterY = zoomCenterY;
+        uiState.setZoomCenterY(zoomCenterY);
     }
 
     public void initSettings(int initX, int initY) {
@@ -212,6 +211,15 @@ public class LifePanel extends JPanel {
         setZoomCenterY(getFocusY() - getFirstClickY()/getCellSize());
     }
 
+    public UIState getUiState() {
+        return uiState;
+    }
+
+    public void setUiState(UIState state) {
+        this.uiState = state;
+        setResidue( getFieldHeight() %  getCellSize());
+        initSettings(uiState.getFirstClickX(), uiState.getFirstClickY());
+    }
 }
 
 
