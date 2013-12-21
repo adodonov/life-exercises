@@ -55,20 +55,12 @@ public class Life {
 
     }
 
-    private boolean isInitState() {
-        return UIMode.INIT.equals(lifeUI.getMode());
-    }
-
-    private boolean isRunning() {
-        return UIMode.RUNNING.equals(lifeUI.getMode());
-    }
-
     public void executeCommand(String command) {
         if ("pause".equals(command)) {
             gameEngine.pause();
             lifeUI.setMode(UIMode.PAUSE);            
         } else if ("step".equals(command)) {
-            if(isInitState()) {
+            if(lifeUI.isInitState()) {
                 initLifeState();
             }            
             gameEngine.step();
@@ -82,7 +74,7 @@ public class Life {
                 gameEngine.pause();
                 lifeUI.setMode(UIMode.PAUSE);
             } else {
-                if(isInitState()) {
+                if(lifeUI.isInitState()) {
                     initLifeState();
                 }
                 gameEngine.run();
@@ -90,20 +82,20 @@ public class Life {
             }
         } else if ("run".equals(command)) {
             if(lifeUI.getSquares() == null || lifeUI.getSquares().size() == 0) {return;}
-            if(isInitState()) {
+            if(lifeUI.isInitState()) {
                 initLifeState();    
             }
             gameEngine.run();
             lifeUI.setMode(UIMode.RUNNING);
         } else if ("showSave".equals(command)) {
-            if(isInitState()) {
+            if(lifeUI.isInitState()) {
                 gameEngine.initLifeState(lifeUI.getSquares());
             }                
-            if(isRunning()) {
+            if(lifeUI.isRunning()) {
                 executeCommand("pause");
             }
         } else if ("showOpen".equals(command)) {
-            if(isRunning()) {
+            if(lifeUI.isRunning()) {
                 executeCommand("pause");
             }
         }

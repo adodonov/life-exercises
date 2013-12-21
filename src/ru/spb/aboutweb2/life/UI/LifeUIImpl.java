@@ -193,4 +193,12 @@ public class LifeUIImpl implements LifeUI {
     public void setUIState(UIState uiState) {
         lifePanel.setUiState(uiState);
     }
+
+    public boolean isInitState() {
+        return UIMode.INIT.equals(getMode());
+    }
+
+    public boolean isRunning() {
+        return UIMode.RUNNING.equals(getMode());
+    }
 }

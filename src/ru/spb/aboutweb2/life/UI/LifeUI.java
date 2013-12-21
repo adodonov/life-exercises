@@ -35,4 +35,8 @@ public interface LifeUI {
 
     void setMode(UIMode mode);
 
+    boolean isInitState();
+
+    boolean isRunning();    
+
 }
